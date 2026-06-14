@@ -1,38 +1,53 @@
-name: Node JS CI Pipeline
+name: Node Docker Pipeline
+
 
 on:
   push:
     branches:
       - main
 
-  pull_request:
-    branches:
-      - main
 
 jobs:
 
-  build-test:
+  build:
 
     runs-on: ubuntu-latest
 
+
     steps:
 
-      - name: Checkout Repository Code
+
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node JS
+
+
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
+
+
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Test Cases
+
+
+      - name: Run Tests
         run: npm test
 
-      - name: Build Application
-        run: npm run build
 
-      - name: Success Message
-        run: echo "CI Pipeline Completed Successfully 🚀"
+
+      - name: Build Docker Image
+        run: docker build -t node-demo .
+
+
+
+      - name: Check Docker Images
+        run: docker images
+
+
+
+      - name: Run Docker Container
+        run: docker run node-demo
